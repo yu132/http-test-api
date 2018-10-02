@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<http-test>
+	<configs>
+		<files>
+			<file>1.xml</file>
+			<file>2.xml</file>
+		</files>
+	</configs>
+	
+	<global-variables><!-- 全局变量 -->
+	
+	</global-variables>
+	
+	<variables><!-- 需要被引用的变量 在<tests>或<test>中使用<import-variables>引入 -->
+		<files>
+			<file>1.xml</file>
+			<file>2.xml</file>
+		</files>
+	</variables>
+	
+	<entitys>
+		<files>
+			<file>1.xml</file>
+			<file>2.xml</file>
+		</files>
+	</entitys>
+	
+	<templates>
+		<files>
+			<file>1.xml</file>
+			<file>2.xml</file>
+		</files>
+	</templates>
+	
+	<tests>
+		<files>
+			<file>1.xml</file>
+			<file>2.xml</file>
+		</files>
+	</tests>
+
+</http-test>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-config>
+	<config>
+		<servers name="">
+			<server name="">
+				<target-host>
+					xxx
+				</target-host>
+				<target-port>
+					xxx
+				</target-port>
+				<target-scheme>
+					xxx
+				</target-scheme>
+			</server>
+		</servers>
+		
+		<default-server>
+		
+			<target>
+				servers.server
+			</target>
+			<!-- or -->
+			<target-host>
+				xxx
+			</target-host>
+			<target-port>
+				xxx
+			</target-port>
+			<target-scheme>
+				xxx
+			</target-scheme>
+		</default-server>
+		
+		
+		<databases name="">
+			<database name="">
+				<!-- necessary -->
+				<driverClassName>xxx</driverClassName>
+				<jdbcUrl>xxx</jdbcUrl>
+				<username>xxx</username>
+				<password>xxx</password>
+				
+				<!-- unnecessary -->
+				<readOnly></readOnly>
+				<connectionTimeout></connectionTimeout>
+				<idleTimeout></idleTimeout>
+				<maxLifetime></maxLifetime>
+				<maximumPoolSize></maximumPoolSize>
+				<minimumIdle></minimumIdle>
+			</database>
+		</databases>
+		
+		<default-database>
+			<target>
+				databases.database
+			</target>
+			<!-- or -->
+			<!-- necessary -->
+			<driverClassName>xxx</driverClassName>
+			<jdbcUrl>xxx</jdbcUrl>
+			<username>xxx</username>
+			<password>xxx</password>
+			
+			<!-- unnecessary -->
+			<readOnly></readOnly>
+			<connectionTimeout></connectionTimeout>
+			<idleTimeout></idleTimeout>
+			<maxLifetime></maxLifetime>
+			<maximumPoolSize></maximumPoolSize>
+			<minimumIdle></minimumIdle>
+		</default-database>
+	</config>
+	
+	<entity-define package="xxx">
+		<entity name="User"><!-- 生成 net.threeple.tools.test.model.User 类 -->
+			<field type="int" name="id"/><!-- User 类有一个名字叫 id，类型为 int 的成员变量 -->
+			<field type="string" name="nickname"/><!-- User 类有一个名字叫 nickname，类型为 String 的成员变量 -->
+		</entity>
+		<entity name="Role">
+			<field type="int" name="id"/>
+			<field type="list::User" name="users"/><!-- Role 类有一个名字叫 users，类型为 List<User> 的成员变量 -->
+		</entity>
+	</entity-define>
+	
+	<entity-define package="xxx">
+		<file>...</file>
+	</entity-define>
+	
+	<templates>
+		<template type="tests" name="xxx"><!-- write as a tests but don't add value here -->
+			<test name="" description="" type="http" server="servers.server">
+				<prepare>
+					<sql> sql </sql>
+				</prepare>
+				<http>
+					<url></url>
+					<method>GET</method>
+					<params>
+						<param type="path" name="columnId">{{check:number}}</param>
+					  	<param type="query" name="machineCode">{{replace:my.machineCode}}</param>
+					</params>
+				</http>
+				<expectation>
+					<statusCode>200</statusCode>
+				        <results>
+							<field name="author" type="string" nullable="false" regex=".*"/>
+							<field name="heat" type="float" gt="0.6"/>
+							<field name="lessons" type="array" minSize="1" maxSize="3"/>
+							<field name="id" type="int" equals="1"/>
+				        </results>
+					<sql resultType="int" gt="0">select user_id from task where task_id={{id}}</sql>
+				 </expectation>
+				<clear>
+					<sql> sql </sql>
+				</clear>
+			</test>
+		</template>
+		
+		<template type="test" name="">
+			<prepare>
+				<sql> sql </sql>
+			</prepare>
+			<http>
+				<url></url>
+				<method>GET</method>
+				<params>
+					<param type="path" name="columnId">{{check:number}}</param>
+				  	<param type="query" name="machineCode">{{replace:my.machineCode}}</param>
+				</params>
+			</http>
+			<expectation>
+				<statusCode>200</statusCode>
+			        <results>
+						<field name="author" type="string" nullable="false" regex=".*"/>
+						<field name="heat" type="float" gt="0.6"/>
+						<field name="lessons" type="array" minSize="1" maxSize="3"/>
+						<field name="id" type="int" equals="1"/>
+			        </results>
+				<sql resultType="int" gt="0">select user_id from task where task_id={{id}}</sql>
+			 </expectation>
+			<clear>
+				<sql> sql </sql>
+			</clear>
+		</template>
+	</templates>
+	
+	<templates>
+		<file>...</file>
+	</templates>
+	
+	<tests name="" description="">
+	
+		<!-- namespace should not be _system_  -->
+		<values namespace="check">
+			<value name="number" type="int">1</value>
+			<value name="number" type="int"><sql database="databases.database">...</sql></value>
+		</values>
+	
+		<test name="" description="" type="http" server="servers.server">
+			<http>
+				<url>/columns/{columnId}</url>
+				<method>GET</method>
+				<params>
+					<param type="path" name="columnId">{{check:number}}</param>
+				  	<param type="query" name="machineCode">{{replace:my.machineCode}}</param>
+				</params>
+			</http>
+				
+	
+			<expectation>
+				<statusCode>200</statusCode>
+			        <results>
+						<field name="author" type="string" nullable="false" regex=".*"/>
+						<field name="heat" type="float" gt="0.6"/>
+						<field name="lessons" type="array" minSize="1" maxSize="3"/>
+						<field name="id" type="int" equals="1"/>
+			        </results>
+				<sql resultType="int" gt="0">select user_id from task where task_id={{id}}</sql>
+				<!--  
+				<script equals="100">
+					print(100);
+				</script>
+				-->
+				
+			 </expectation>
+			
+			
+			<clear>
+				<sql name="task.id">select `task_id` from `task` where `user_id`={{id}}</sql>
+				<sql>select `task_id` from `task` where `user_id`={{task.id}}</sql>
+			</clear>
+		</test>
+		<test>
+		
+		</test>
+	
+	</tests>
+	
+	<!-- default pacakge as a group with one test -->
+	<test name="">
+		...
+	</test>
+	
+	<tests>
+		<values>
+			...
+		</values>
+		<using-template>
+			template-name(type should be tests)
+		</using-template>
+	
+	</tests>
+	
+	<tests>
+		<values>
+			...
+		</values>
+		<test>
+			<using-template>
+				template-name(type should be test)
+			</using-template>
+		</test>
+		
+	</tests>
+
+</test-config>
