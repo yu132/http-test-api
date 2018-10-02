@@ -1,4 +1,4 @@
-package test.resource.configs.servers;
+package test.manager.configs.servers;
 
 import java.util.List;
 import java.util.Map;

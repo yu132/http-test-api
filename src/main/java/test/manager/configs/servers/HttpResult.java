@@ -1,4 +1,4 @@
-package test.resource.configs.servers;
+package test.manager.configs.servers;
 
 public class HttpResult {
 
